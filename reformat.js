@@ -166,7 +166,21 @@ function reformatCourseGrade(){
     reformatAssignmentsTitle();
 }
 
+function login(){
+    chrome.storage.sync.get("userInfo", (store) => {
+        var userInfo = store.userInfo;
+        if(!userInfo.enabled) return;
+        var username = document.getElementById("fieldAccount");
+        if(username == undefined) return;
+        username.value = userInfo.username;
+        var pw = document.getElementById("pw");
+        pw.value = userInfo.password;
+        document.getElementById("btn-enter").click();
+    });
+}
+
 function reformatSource(){
+    login();
     reformatHeader();
     recolorTableHeadings();
     try {
