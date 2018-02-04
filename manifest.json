@@ -3,7 +3,7 @@
 
   "name": "SPS Source Formatter",
   "description": "This extension reformats the Seattle Schools website \"The Source\". It's unofficial so don't contact Seattle Schools if its broken.",
-  "version": "1.0",
+  "version": "2.0",
   "icons": {
      "16": "icon.png",
      "48": "icon48.png",

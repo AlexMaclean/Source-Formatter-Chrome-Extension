@@ -1,37 +1,34 @@
 <!doctype html>
-<html>
+<html><head>
+    <title>Getting Started Extension's Popup</title>
+    <style type="text/css">
+      body {
+        margin: 10px;
+      }
 
-<head>
-  <title>Source Formatter Popup</title>
-  <style type="text/css">
-    body {
-      margin: 10px;
-    }
+      h1 {
+        font-size: 15px;
+        color: navy;
+      }
 
-    h2 {
-      font-size: 15px;
-      color: navy;
-      margin: 1px;
-    }
+      #container {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+      }
+    </style>
+  </head>
 
-    #container {
-      align-items: center;
-      display: flex;
-      justify-content: space-between;
-    }
-  </style>
-  <script src="popup.js"></script>
-</head>
+  <body>
+    <div style="width:300px">
+    <h1>Source Formatter</h1>
+    <p>
+      This extension reformats the Seattle Schools website "The Source" (
+      <a target="_blank" href="https://ps.seattleschools.org/public/">https://ps.seattleschools.org/public/</a>    
+      ). It's completely unofficial so don't contact Seattle Schools if something is broken, instead email me at 
+      <a target="_blank" href="mailto:alex.maclean2000">alex.maclean2000@gmail.com</a>
+    </p>
+    </div>
+  
 
-<body>
-  <div style="width:200px; height:135px">
-      <h2>Auto Login</h2>
-      Username:<br>
-      <input type="text" id="user"><br> 
-      Password:<br>
-      <input type="password" id="pass"><br>
-      <input id="check" type="checkbox">Enable<br>
-      <button style="float:right" id='saveData'>Save Data</button>
-  </div>
-</body>
-</html>
+</body></html>

@@ -1,3 +1,4 @@
+/*
 function saveUserInfo() {
     var username = document.getElementById("user").value;
     var password = document.getElementById("pass").value;
@@ -22,3 +23,4 @@ function initializePopup(){
 }
 
 document.addEventListener('DOMContentLoaded', initializePopup);
+*/

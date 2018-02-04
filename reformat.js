@@ -6,12 +6,16 @@ function averageColors(c1, c2, precent) {
     return "rgb(" + rAve + "," + gAve + "," + bAve + ")";
 }
 
+function removeElement(el) {
+    el.parentNode.removeChild(el);
+}
+
 function getColor(percentage) {
     var stops = [{ loc: 100, r: 0, g: 128, b: 0 }, { loc: 85, r: 173, g: 216, b: 230 }, { loc: 75, r: 255, g: 255, b: 0 }, { loc: 65, r: 255, g: 165, b: 0 }, { loc: 40, r: 255, g: 0, b: 0 }, { loc: 0, r: 0, g: 0, b: 0 }]
     var topStop = stops[0];
     var bottumStop = stops[stops.length - 1];
 
-    percentage = Math.min(percentage,100);
+    percentage = Math.min(percentage, 100);
 
     for (var i = 0; i < stops.length; i++) {
         var stop = stops[i]
@@ -47,7 +51,7 @@ function reformatCourseInfo() {
             var elem = contacts[j];
             var courseInfo = elem.parentNode;
             courseInfo.removeChild(elem);
-            courseInfo.innerHTML = "<strong>" + courseInfo.innerHTML.replace(new RegExp("&nbsp;", 'g'), '').replace("<br>", "</strong><br>");
+            courseInfo.innerHTML = "<strong>" + courseInfo.innerHTML.replace("&nbsp;", '').replace("&nbsp;", '').replace("<br>", "</strong><br>");
         }
     } catch (e) { }
 }
@@ -97,98 +101,183 @@ function colorAssignments() {
                 continue;
             }
             assignmentElements[assignmentElements.length - 2].style.background = getColor(gardePercentage);
+            if (gardePercentage < 50) {
+                assignmentElements[assignmentElements.length - 2].style.color = "white"
+            }
         }
     } catch (e) { }
 }
 
-function reformatAssignmentsTitle(){
+function reformatAssignmentsTitle() {
     try {
-    var classInfoTable = document.getElementsByClassName("linkDescList")[0];
-    var classInfo = classInfoTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr")[1].getElementsByTagName("td");
+        var classInfoTable = document.getElementsByClassName("linkDescList")[0];
+        var classInfo = classInfoTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr")[1].getElementsByTagName("td");
 
-    var divWrapper = document.createElement("div");
-    var divTitle = document.createElement("div");
+        var divWrapper = document.createElement("div");
+        var divTitle = document.createElement("div");
 
-    var title = document.createElement("h1");
-    title.innerText = classInfo[0].innerText;
-    title.style.margin = 0;
-    var subtitle = document.createElement("p");
-    subtitle.innerText = classInfo[1].innerText;
-    divTitle.appendChild(title);
-    divTitle.appendChild(subtitle);
-    divTitle.style = "display: inline-block; float:left; margin: 0 10px;";
+        var title = document.createElement("h1");
+        title.innerText = classInfo[0].innerText;
+        title.style.margin = 0;
+        var subtitle = document.createElement("p");
+        subtitle.innerText = classInfo[1].innerText;
+        divTitle.appendChild(title);
+        divTitle.appendChild(subtitle);
+        divTitle.style = "display: inline-block; float:left; margin: 0 10px;";
 
-    var gradeBadge = document.createElement("div");
-    gradeBadge.style = "display: inline-block; float:left; text-align: center; font-weight: bold; padding: 0 5px;";
-	var letter = classInfo[3].innerText.substring(0 ,classInfo[3].innerText.indexOf(" "));
-	var num = classInfo[3].innerText.substring(classInfo[3].innerText.indexOf(" ")).replace(new RegExp(" ", 'g'), "").replace(new RegExp("\u00a0", 'g'), "").replace("%","");
+        var gradeBadge = document.createElement("div");
+        gradeBadge.style = "display: inline-block; float:left; text-align: center; font-weight: bold; padding: 0 5px;";
+        var letter = classInfo[3].innerText.substring(0, classInfo[3].innerText.indexOf(" "));
+        var num = classInfo[3].innerText.substring(classInfo[3].innerText.indexOf(" ")).replace(new RegExp(" ", 'g'), "").replace(new RegExp("\u00a0", 'g'), "").replace("%", "");
 
-    gradeBadge.innerHTML = letter + "<br>" + num + "%";
-    gradeBadge.style.background = getColor(parseInt(num));
+        gradeBadge.innerHTML = letter + "<br>" + num + "%";
+        
+        if(!isNaN(parseInt(num))){
+            gradeBadge.style.background = getColor(parseInt(num));
+        }
+        else{
+            gradeBadge.style.background = "Silver";
+        }
 
-    divWrapper.appendChild(divTitle);
-    divWrapper.appendChild(gradeBadge)
+        divWrapper.appendChild(divTitle);
+        divWrapper.appendChild(gradeBadge)
 
-    var currentTitle = document.getElementsByTagName("h1")[0];
-    currentTitle.parentNode.replaceChild(divWrapper, currentTitle);
-    classInfoTable.parentNode.removeChild(classInfoTable);
+        var currentTitle = document.getElementsByTagName("h1")[0];
+        currentTitle.parentNode.replaceChild(divWrapper, currentTitle);
+        classInfoTable.parentNode.removeChild(classInfoTable);
     } catch (e) { }
 }
 
-function recolorTableHeadings(){
-    try {
-    var thArray = document.getElementsByTagName("th");
-    for (var j = 0; j < thArray.length; j++) {
-        var th = thArray[j];
-        if(th.style.background == ""){
-            th.style.background = "#114890";
-            th.style.color = "white";
-            th.style.borderColor = "#114890";
-            try {
-            var children = th.childNodes;
-            for(var i = 0; i < children.length; i++){
-                children[i].style.color = "white";
-            }
-        } catch (e) { }
+function recolorTableRows(tag){
+    var items = document.getElementsByTagName(tag);
+    for(var i = 0; i < items.length; i++){
+        var item = items[i];
+        if(item.style.background == "rgb(238, 238, 238)"){
+            item.style.background = "white";
         }
     }
+}
+
+function sortClasses() {
+    var container = document.getElementById("quickLookup");
+    var classTable = document.getElementById("tblgrades");
+    var classRows = classTable.getElementsByTagName("tr");
+    var classBody = classTable.getElementsByTagName("tbody")[0];
+    var semester2 = false;
+    var semester2Table = classTable.cloneNode(true);
+
+    removeElement(document.getElementById("tblgr-q3"));
+    removeElement(document.getElementById("tblgr-q4"));
+    removeElement(document.getElementById("tblgr-s2"));
+
+    for (var j = 0; j < classRows.length; j++) {
+        var classRow = classRows[j];
+        var tds = classRow.getElementsByClassName("colorMyGrade");
+        for (var k = 0; k < tds.length; k++) {
+            var td = tds[k];
+            if (td.getAttribute("headers") == "tblgr-s2") {
+                classBody.removeChild(classRow);
+                semester2 = true;
+            }
+        }
+    }
+
+    if (semester2) {
+
+        container.insertBefore(semester2Table, classTable);
+
+        var s1title = document.createElement("h1");
+        s1title.innerText = "Semester 1";
+        container.insertBefore(s1title, classTable);
+
+        var s2title = document.createElement("h1");
+        s2title.innerText = "Semester 2";
+        container.insertBefore(s2title, semester2Table);
+
+        removeElement(document.getElementById("tblgr-q1"));
+        removeElement(document.getElementById("tblgr-q2"));
+        removeElement(document.getElementById("tblgr-s1"));
+
+        var s2Rows = semester2Table.getElementsByTagName("tr");
+        var s2Body = semester2Table.getElementsByTagName("tbody")[0];
+
+        for (var j = 0; j < s2Rows.length; j++) {
+            var s2Row = s2Rows[j];
+            var tds = s2Row.getElementsByClassName("notInSession");
+            for (var k = 0; k < tds.length; k++) {
+                var td = tds[k];
+                if (td.getAttribute("headers") == "tblgr-s2") {
+                    s2Body.removeChild(s2Row);
+                }
+            }
+        }
+        recolorTableRows("td");
+        recolorTableRows("th");
+    }
+
+    var trs = document.getElementsByTagName("tr");
+    for (var i = 0; i < trs.length; i++) {
+        var tr3 = trs[i];
+        var extraTds = tr3.getElementsByClassName("notInSession");
+        var count = 0;
+        for(var y = 0; y < extraTds.length; y++){
+            var header = String(extraTds[y].getAttribute("headers"));
+            if (header.search("wk") == -1 && count < 3) {
+                extraTds[y].style.display = "none";
+                count++;
+            }
+        }
+    }
+
+    var ths = document.getElementsByTagName("th");
+    for (var k = 0; k < ths.length; k++) {
+        if (ths[k].getAttribute("colspan") == 18) {
+            ths[k].setAttribute("colspan", 15);
+        }
+    }
+}
+
+function recolorTableHeadings() {
+    try {
+        var thArray = document.getElementsByTagName("th");
+        for (var j = 0; j < thArray.length; j++) {
+            var th = thArray[j];
+            if (th.style.background == "") {
+                th.style.background = "#114890";
+                th.style.color = "white";
+                th.style.borderColor = "#114890";
+                try {
+                    var children = th.childNodes;
+                    for (var i = 0; i < children.length; i++) {
+                        children[i].style.color = "white";
+                    }
+                } catch (e) { }
+            }
+        }
     } catch (e) { }
 }
 
-function reformatGradesSummary(){
+function reformatGradesSummary() {
     recolorGrades();
     removeExplanation();
     reformatCourseInfo();
+    sortClasses();
 }
 
-function reformatCourseGrade(){
+function reformatCourseGrade() {
     colorAssignments();
     reformatAssignmentsTitle();
 }
 
-function login(){
-    chrome.storage.sync.get("userInfo", (store) => {
-        var userInfo = store.userInfo;
-        if(!userInfo.enabled) return;
-        var username = document.getElementById("fieldAccount");
-        if(username == undefined) return;
-        username.value = userInfo.username;
-        var pw = document.getElementById("pw");
-        pw.value = userInfo.password;
-        document.getElementById("btn-enter").click();
-    });
-}
-
-function reformatSource(){
-    login();
+function reformatSource() {
     reformatHeader();
     recolorTableHeadings();
     try {
         reformatGradesSummary();
-    } catch (error) {}
+    } catch (error) { }
     try {
         reformatCourseGrade();
-    } catch (error) {}
+    } catch (error) { }
 }
 
 reformatSource();
