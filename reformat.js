@@ -33,6 +33,7 @@ function recolorGrades() {
         for (var i = 0; i < grades.length; i++) {
             var gradeCell = grades[i];
             var gradeText = gradeCell.firstElementChild.innerHTML;
+            gradeCell.firstElementChild.style.display = "block";
             if (!gradeText.includes("<br>")) {
                 continue;
             }
@@ -114,19 +115,21 @@ function reformatAssignmentsTitle() {
         var classInfo = classInfoTable.getElementsByTagName("tbody")[0].getElementsByTagName("tr")[1].getElementsByTagName("td");
 
         var divWrapper = document.createElement("div");
+        divWrapper.style = "float: left; width: 100%;"
         var divTitle = document.createElement("div");
 
         var title = document.createElement("h1");
         title.innerText = classInfo[0].innerText;
         title.style.margin = 0;
+        title.style.fontSize = "1.75em";
         var subtitle = document.createElement("p");
         subtitle.innerText = classInfo[1].innerText;
         divTitle.appendChild(title);
         divTitle.appendChild(subtitle);
-        divTitle.style = "display: inline-block; float:left; margin: 0 10px;";
+        divTitle.style = "display: inline-block; float:left; margin: 0px 10px 0px 0px;";
 
         var gradeBadge = document.createElement("div");
-        gradeBadge.style = "display: inline-block; float:left; text-align: center; font-weight: bold; padding: 0 5px;";
+        gradeBadge.style = "display: inline-block; float:left; text-align: center; font-weight: bold; padding: 5px 10px; color: black;";
         var letter = classInfo[3].innerText.substring(0, classInfo[3].innerText.indexOf(" "));
         var num = classInfo[3].innerText.substring(classInfo[3].innerText.indexOf(" ")).replace(new RegExp(" ", 'g'), "").replace(new RegExp("\u00a0", 'g'), "").replace("%", "");
 
@@ -136,7 +139,7 @@ function reformatAssignmentsTitle() {
             gradeBadge.style.background = getColor(parseInt(num));
         }
         else{
-            gradeBadge.style.background = "Silver";
+            gradeBadge.style.display = "none";
         }
 
         divWrapper.appendChild(divTitle);
