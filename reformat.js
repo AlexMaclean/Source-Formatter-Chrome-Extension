@@ -260,6 +260,16 @@ function recolorTableHeadings() {
     } catch (e) { }
 }
 
+function removeCategories(){
+    try {
+        var categoriesDiv = document.getElementById("sps-assignment-categories-container"); 
+        var rows = categoriesDiv.getElementsByTagName("tr");
+        if(rows.length == 1){
+            categoriesDiv.style.display = "none";
+        }
+    } catch (e) { }
+}
+
 function reformatGradesSummary() {
     recolorGrades();
     removeExplanation();
@@ -270,6 +280,7 @@ function reformatGradesSummary() {
 function reformatCourseGrade() {
     colorAssignments();
     reformatAssignmentsTitle();
+    removeCategories();
 }
 
 function reformatSource() {
