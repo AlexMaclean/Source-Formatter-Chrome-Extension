@@ -9,8 +9,10 @@ function saveUserInfo() {
     document.getElementById("text1").innerHTML = JSON.stringify(items);
     chrome.storage.sync.set(items);
 }
+*/
 
-function initializePopup(){
+function initializePopup() {
+    /*
     var saveButton = document.getElementById('saveData');
     saveButton.addEventListener('click', saveUserInfo);
 
@@ -20,7 +22,19 @@ function initializePopup(){
         document.getElementById("pass").value = userInfo.password;
         document.getElementById("check").checked = userInfo.enabled;
     });
+    */
+    const disableButton = document.getElementById("disable-button");
+    const enabledStatus = document.getElementById('enabled-status');
+    disableButton.onclick = () => {
+        chrome.storage.local.get("isEnabled", res => {
+            chrome.storage.local.set({isEnabled: !res.isEnabled}, window.location.reload);
+        });
+    };
+    chrome.storage.local.get("isEnabled", res => {
+        enabledStatus.innerText = res.isEnabled ? "Enabled" : "Disabled";
+    });
 }
 
-document.addEventListener('DOMContentLoaded', initializePopup);
-*/
+document.addEventListener('DOMContentLoaded', function() {
+    initializePopup();
+});
