@@ -294,4 +294,13 @@ function reformatSource() {
     } catch (error) { }
 }
 
-reformatSource();
+chrome.storage.local.get("isEnabled", res => {
+    if (res.isEnabled) {
+        reformatSource();
+    }
+});
+chrome.storage.onChanged.addListener(changes => {
+    if ("isEnabled" in changes) {
+        window.location.reload();
+    }
+});
